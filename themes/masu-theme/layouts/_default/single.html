@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="ja"><head>
+  <meta charset="utf-8">
+  <title>{{ .Title }} | {{ .Site.Title }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+</head><body>
+<h1>{{ .Title }}</h1>
+<div class="thumb"><img src="{{ .Params.thumbnail }}"></div>
+
+<div class="video">
+  {{ .Content }}   <!-- iframe が入る -->
+</div>
+
+<p><a href="{{ .Params.detail_url }}" target="_blank" rel="noopener">▶ 詳細ページへ</a></p>
+</body></html>
+

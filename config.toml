@@ -1,0 +1,15 @@
+baseURL = "https://example.com/"
+languageCode = "ja-jp"
+title = "動画まとめサイト"
+theme = "masu-theme"
+enableRobotsTXT = true
+
+[pagination]
+  pagerSize = 30        # ← 旧 paginate を置き換え
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true     # iframe を許可
+
+

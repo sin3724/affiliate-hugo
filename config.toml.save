@@ -1,0 +1,24 @@
+
+
+languageCode = "ja-jp"
+title = "動画まとめサイト"
+theme = "masu-theme"
+enableRobotsTXT = true
+paginate = 30          # 1ページあたりの記事数baseURL = "https://example.com/"   # 後で本番URLへ変更
+languageCode = "ja-jp"
+title = "動画まとめサイト"
+theme = "masu-theme"
+enableRobotsTXT = true
+paginate = 30          # 1ページあたりの記事数baseURL = "https://example.com/"   # 後で本番URLへ変更
+languageCode = "ja-jp"
+title = "動画まとめサイト"
+theme = "masu-theme"
+enableRobotsTXT = true
+paginate = 30          # 1ページあたりの記事数XXXbaseURL = "https://example.com/"   # 後で本番URLへ変更
+languageCode = "ja-jp"
+title = "動画まとめサイト"
+theme = "masu-theme"
+enableRobotsTXT = true
+paginate = 30          # 1ページあたりの記事数
+
+

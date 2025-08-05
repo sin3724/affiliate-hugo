@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="ja"><head>
+  <meta charset="utf-8">
+  <title>{{ .Site.Title }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+</head><body>
+<h1>{{ .Site.Title }}</h1>
+
+{{ $paginator := .Paginate (.Site.RegularPages) }}
+{{ range $paginator.Pages }}
+  <a class="card" href="{{ .RelPermalink }}">
+    <img src="{{ .Params.thumbnail }}" loading="lazy">
+    <h2>{{ .Title }}</h2>
+  </a>
+{{ end }}
+
+<nav>
+  {{ if $paginator.HasPrev }}<a href="{{ $paginator.Prev.URL }}">« Newer</a>{{ end }}
+  {{ if $paginator.HasNext }}<a href="{{ $paginator.Next.URL }}">Older »</a>{{ end }}
+</nav>
+</body></html>
+
