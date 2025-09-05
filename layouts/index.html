@@ -2,10 +2,6 @@
 <main class="container home">
   <h1>{{ .Site.Title }}</h1>
 
-  {{/* トップに広告レールを出す場合だけ有効化（任意）
-  {{ partial "ad_rails.html" . }}
-  */}}
-
   {{ $pages := where .Site.RegularPages "Section" "posts" }}
   {{ $p := .Paginate $pages }}
 
