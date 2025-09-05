@@ -1,0 +1,37 @@
+{{ define "main" }}
+<main class="container home">
+  <h1>{{ .Site.Title }}</h1>
+
+  {{/* トップに広告レールを出す場合だけ有効化（任意）
+  {{ partial "ad_rails.html" . }}
+  */}}
+
+  {{ $pages := where .Site.RegularPages "Section" "posts" }}
+  {{ $p := .Paginate $pages }}
+
+  <div class="card-grid">
+    {{ range $p.Pages }}
+      {{ $slug := cond (and .File .File.BaseFileName) .File.BaseFileName (urlize .Title) }}
+      {{ $local := "" }}
+      {{ range (slice "webp" "jpg" "jpeg" "png") }}
+        {{ $abs := printf "static/img/%s.%s" $slug . }}
+        {{ if (and (eq $local "") (fileExists $abs)) }}
+          {{ $local = (printf "/img/%s.%s" $slug .) }}
+        {{ end }}
+      {{ end }}
+      {{ $thumb := cond (ne $local "") $local .Params.thumbnail }}
+
+      <a class="card" href="{{ .RelPermalink }}">
+        {{ if $thumb }}<img src="{{ $thumb }}" loading="lazy" alt="{{ .Title }}">{{ end }}
+        <h2>{{ .Title }}</h2>
+      </a>
+    {{ end }}
+  </div>
+
+  {{/* ページネーション */}}
+  <nav class="pager" aria-label="Pagination">
+    {{ if $p.HasPrev }}<a href="{{ $p.Prev.URL }}">← 新しい投稿</a>{{ end }}
+    {{ if $p.HasNext }}<a href="{{ $p.Next.URL }}">古い投稿 →</a>{{ end }}
+  </nav>
+</main>
+{{ end }}

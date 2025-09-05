@@ -1,0 +1,37 @@
+/* ===== レール広告の基本レイアウト ===== */
+.ad-rails {
+  display: block;
+  clear: both;      /* 前後のfloat影響をクリア */
+  margin: 12px 0;
+}
+
+/* 広告ボックス：常に表示（固定は解除） */
+.ad-left,
+.ad-right {
+  position: static !important;
+  top: auto !important;
+  bottom: auto !important;
+  display: block !important;
+  margin: 8px 8px;
+  text-align: center;
+}
+
+/* PC幅：左右に振り分け（バナー幅に応じて調整） */
+@media (min-width: 1200px) {
+  .ad-left  { float: left;  width: 160px; margin-right: 12px; }
+  .ad-right { float: right; width: 160px; margin-left: 12px; }
+
+  /* 本文がフロートに押し潰されない簡易対策（テーマに合わせて調整可） */
+  main, .article, .post-content {
+    overflow: hidden;
+  }
+}
+
+/* スマホ：上下に積む（表示は維持） */
+@media (max-width: 1199px) {
+  .ad-left, .ad-right {
+    float: none;
+    width: 100%;
+    margin: 10px 0;
+  }
+}
