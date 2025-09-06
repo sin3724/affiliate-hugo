@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="ja"><head>
+  <meta charset="utf-8">
+  <title>{{ .Title }} | {{ .Site.Title }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+{{ partial "seo_head.html" . }}
+</head><body>
+{{ partial "ad_rails.html" . }}
+<a href="/">← 一覧へ</a>
+<h1>{{ .Title }}</h1>
+{{ partial "ad_rails.html" . }}
+<!-- DEBUG_SINGLE:posts/single.html  .Type={{ .Type }}  .Layout={{ .Layout }} -->
+<!-- DEBUG_SINGLE:_default/single.html  .Type={{ .Type }}  .Layout={{ .Layout }} -->
+
+{{ partial "ads-left.html" . }}
+{{ partial "ads-right.html" . }}
+
+{{ $.Scratch.Set "slug" "" }}
+{{ with .File }}{{ $.Scratch.Set "slug" .BaseFileName }}{{ end }}
+{{ $slug := or ($.Scratch.Get "slug") (urlize .Title) }}
+
+{{ $.Scratch.Set "local" "" }}
+{{ range (slice "webp" "jpg" "jpeg" "png") }}
+  {{ $abs := printf "static/img/%s.%s" $slug . }}
+  {{ if (fileExists $abs) }}
+    {{ $.Scratch.Set "local" (printf "/img/%s.%s" $slug .) }}
+  {{ end }}
+{{ end }}
+{{ $thumb := default .Params.thumbnail ($.Scratch.Get "local") }}
+
+{{ if $thumb }}
+  <div class="thumb"><img src="{{ $thumb }}" alt="{{ .Title }}"></div>
+{{ end }}
+
+{{ if .Params.aff_url }}
+  <p><a class="card" href="{{ .Params.aff_url }}" target="_blank" rel="nofollow noopener">▶ 公式ページへ</a></p>
+{{ else if .Params.link_tag }}
+  {{ .Params.link_tag | safeHTML }}
+{{ else if .Params.product_url }}
+  <p><a class="card" href="{{ .Params.product_url }}" target="_blank" rel="noopener">▶ 作品ページへ</a></p>
+{{ end }}
+
+<div class="content">
+  {{ .Content }}
+</div>
+<section class="related">
+<h2>関連コンテンツ</h2>
+<ul>
+{{ $cur := . }}
+{{ with .Params.tags }}{{ $first := index . 0 }}
+{{ range first 6 (where $.Site.RegularPages "Params.tags" "intersect" (slice $first)) }}
+  {{ if ne .RelPermalink $cur.RelPermalink }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}
+{{ end }}{{ end }}
+</ul>
+</section>
+</body></html>
