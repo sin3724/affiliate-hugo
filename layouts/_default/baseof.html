@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>{{ block "title" . }}{{ .Title }}{{ end }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+
+  {{- /* ===== Canonical ===== */ -}}
+  {{ if .IsHome -}}
+    <link rel="canonical" href="{{ .Site.BaseURL }}">
+  {{- else -}}
+    <link rel="canonical" href="{{ .Permalink }}">
+  {{- end }}
+</head>
+<body>
+  {{ block "main" . }}{{ end }}
+</body>
+  {{ partial "header.html" . }}
+  {{ block "main" . }}{{ end }}
+</html>

@@ -1,0 +1,48 @@
+{{- /* ===== Canonical ===== */ -}}
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- /* ===== Meta Description ===== */ -}}
+{{- $desc := "" -}}
+{{- if .IsPage -}}
+  {{- $d := .Description -}}
+  {{- if not $d -}}
+    {{- $d = (.Summary | plainify | truncate 160) -}}
+  {{- end -}}
+  {{- $desc = $d -}}
+{{- else -}}
+  {{- $desc = (.Site.Params.siteDescription | default "") -}}
+{{- end -}}
+{{- with $desc -}}
+<meta name="description" content="{{ . }}">
+{{- end -}}
+
+{{- /* ===== OG Image 決定ロジック =====
+      優先順：
+      1) static/img/<slug>.(webp|jpg|jpeg|png) があればそれ
+      2) .Params.thumbnail / .Params.ogImage
+      3) .Site.Params.defaultImage
+*/ -}}
+{{- $ogimg := "" -}}
+{{- if .IsPage -}}
+  {{- $local := "" -}}
+  {{- $slug  := cond (and .File .File.BaseFileName) .File.BaseFileName (urlize .Title) -}}
+  {{- range $ext := (slice "webp" "jpg" "jpeg" "png") -}}
+    {{- if and (eq $local "") (fileExists (printf "static/img/%s.%s" $slug $ext)) -}}
+      {{- $local = (printf "/img/%s.%s" $slug $ext) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $ogimg = (or $local .Params.thumbnail .Params.ogImage .Site.Params.defaultImage) -}}
+{{- else -}}
+  {{- $ogimg = (or .Site.Params.defaultImage "") -}}
+{{- end -}}
+
+{{- /* ===== Open Graph / Twitter ===== */ -}}
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}">
+{{- with $desc -}}<meta property="og:description" content="{{ . }}">{{- end }}
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+{{- with $ogimg -}}<meta property="og:image" content="{{ . }}">{{- end }}
+
+<meta name="twitter:card" content="{{ if $ogimg }}summary_large_image{{ else }}summary{{ end }}">
+{{- with $ogimg -}}<meta name="twitter:image" content="{{ . }}">{{- end }}

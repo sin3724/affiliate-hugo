@@ -1,0 +1,66 @@
+{{- /* ===== Canonical ===== */ -}}
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- /* ===== Description ===== */ -}}
+{{- $desc := "" -}}
+{{- if .IsPage -}}
+  {{- $desc = or .Description (.Summary | plainify | truncate 160) -}}
+{{- else -}}
+  {{- $desc = or .Site.Params.siteDescription "" -}}
+{{- end -}}
+{{- with $desc }}<meta name="description" content="{{ . }}">{{ end }}
+
+{{- /* ===== OG image 決定 ===== */ -}}
+{{- $ogimg := "" -}}
+{{- if .IsPage -}}
+  {{- $slug := (or (and .File .File.BaseFileName) (urlize .Title)) -}}
+  {{- $local := "" -}}
+  {{- range (slice "webp" "jpg" "jpeg" "png") -}}
+    {{- $abs := printf "static/img/%s.%s" $slug . -}}
+    {{- if (fileExists $abs) -}}{{- $local = (printf "/img/%s.%s" $slug .) -}}{{- end -}}
+  {{- end -}}
+  {{- $ogimg = (cond (ne $local "") $local (or .Params.thumbnail .Site.Params.defaultImage)) -}}
+{{- else -}}
+  {{- $ogimg = (or .Site.Params.defaultImage "") -}}
+{{- end -}}
+
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}">
+{{- with $desc }}<meta property="og:description" content="{{ . }}">{{ end }}
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+{{- with $ogimg }}<meta property="og:image" content="{{ . }}">{{ end }}
+
+<meta name="twitter:card" content="summary_large_image">
+{{- with .Site.Params.twitterSite }}<meta name="twitter:site" content="{{ . }}">{{ end }}
+{{- with .Site.Params.twitterCreator }}<meta name="twitter:creator" content="{{ . }}">{{ end }}
+
+{{- /* ===== Google Site Verification ===== */ -}}
+{{- with .Site.Params.google_site_verification }}<meta name="google-site-verification" content="{{ . }}">{{ end }}
+
+{{- /* ===== JSON-LD ===== */ -}}
+{{- if .IsPage -}}
+{{- $data := dict
+    "@context" "https://schema.org"
+    "@type" "Article"
+    "headline" .Title
+    "image" $ogimg
+    "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+    "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+    "mainEntityOfPage" .Permalink
+    "author" (dict "@type" "Person" "name" (or .Params.author "Admin"))
+-}}
+<script type="application/ld+json">
+{{ $data | jsonify | safeJS }}
+</script>
+{{- else -}}
+{{- $data := dict
+    "@context" "https://schema.org"
+    "@type" "WebSite"
+    "name" .Site.Title
+    "url" .Site.BaseURL
+-}}
+<script type="application/ld+json">
+{{ $data | jsonify | safeJS }}
+</script>
+{{- end -}}

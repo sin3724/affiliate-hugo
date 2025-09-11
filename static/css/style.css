@@ -7,3 +7,38 @@ h1,h2{line-height:1.3}
 .video iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
 .thumb img{width:100%;border-radius:8px}
 
+
+/* ====== Ad Rails (PC only) ====== */
+.ad-rail{position:fixed;top:84px;z-index:20;max-height:80vh;overflow:hidden;display:none;pointer-events:none}
+.ad-rail>*{pointer-events:auto}
+.ad-rail--left{left:8px;width:300px}
+.ad-rail--right{right:8px;width:300px}
+@media(min-width:1400px){
+  .ad-rail{display:block}
+  /* 余白をつくって本文が隠れないように（PCワイド時のみ） */
+  body{margin-left:320px;margin-right:320px}
+}
+/* ダミー表示用（テスト後に不要なら削除OK） */
+.ad-sample{height:600px;border:2px dashed #999;border-radius:8px;
+           display:flex;align-items:center;justify-content:center;font-weight:700;
+           background:#f6f6f6}
+
+/* === Ad rails override (左右ガター広告) ============================== */
+/* SP/タブは非表示 */
+.ad-left, .ad-right { display: none; }
+
+/* デスクトップのみ表示＋スクロール中は追従（sticky） */
+@media (min-width: 1280px) {
+  .ad-left, .ad-right {
+    display: block;
+    position: sticky;   /* ← 固定ではなく、上に達したら追従 */
+    top: 16px;          /* ヘッダー分の余白は適宜調整 */
+    align-self: start;
+    z-index: 1;         /* コンテンツに被らない程度に */
+    max-width: 180px;   /* 広告幅の上限。必要なら変更 */
+  }
+}
+
+/* 念のため、以前の fixed 指定を殺す */
+.ad-left.fixed, .ad-right.fixed { position: sticky !important; }
+/* =================================================================== */

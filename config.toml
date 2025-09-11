@@ -1,6 +1,8 @@
-baseURL = "https://example.com/"
+  customCSS = ["css/custom.css"]
+
+baseURL = "https://stellar-pudding-178dd4.netlify.app/"
 languageCode = "ja-jp"
-title = "動画まとめサイト"
+title = "極選アダルトNAVI"
 theme = "masu-theme"
 enableRobotsTXT = true
 
@@ -8,8 +10,4 @@ enableRobotsTXT = true
   pagerSize = 30        # ← 旧 paginate を置き換え
 
 [markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true     # iframe を許可
-
 

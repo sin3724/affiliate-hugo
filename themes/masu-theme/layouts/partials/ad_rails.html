@@ -1,0 +1,7 @@
+{{- $enabled := (and .Site.Params.ads (or .Site.Params.ads.enable true)) -}}
+{{- if $enabled -}}
+  {{- $left  := (or .Site.Params.ads.left  "") -}}
+  {{- $right := (or .Site.Params.ads.right "") -}}
+  <div class="ad-rail ad-rail--left">{{ $left  | safeHTML }}</div>
+  <div class="ad-rail ad-rail--right">{{ $right | safeHTML }}</div>
+{{- end -}}

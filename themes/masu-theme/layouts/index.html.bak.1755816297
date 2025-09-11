@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="ja"><head>
+  <meta charset="utf-8">
+  <title>{{ .Site.Title }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+</head><body>
+<h1>{{ .Site.Title }}</h1>
+
+{{ $pages := where .Site.RegularPages "Type" "posts" }}
+{{ $p := .Paginate $pages }}
+
+{{ range $p.Pages }}
+  {{ $.Scratch.Set "slug" "" }}
+  {{ with .File }}{{ $.Scratch.Set "slug" .BaseFileName }}{{ end }}
+  {{ $slug := or ($.Scratch.Get "slug") (urlize .Title) }}
+
+  {{ $.Scratch.Set "local" "" }}
+  {{ range (slice "webp" "jpg" "jpeg" "png") }}
+    {{ $abs := printf "static/img/%s.%s" $slug . }}
+    {{ if (fileExists $abs) }}{{ $.Scratch.Set "local" (printf "/img/%s.%s" $slug .) }}{{ end }}
+  {{ end }}
+
+  {{ $local := $.Scratch.Get "local" }}
+  {{ $thumb := cond (ne $local "") $local .Params.thumbnail }}
+
+  <a class="card" href="{{ .RelPermalink }}">
+    {{ if $thumb }}<img src="{{ $thumb }}" loading="lazy" alt="{{ .Title }}">{{ end }}
+    <h2>{{ .Title }}</h2>
+  </a>
+{{ end }}
+
+<nav>
+  {{ if $p.HasPrev }}<a href="{{ $p.Prev.URL }}">« Newer</a>{{ end }}
+  {{ if $p.HasNext }}<a href="{{ $p.Next.URL }}">Older »</a>{{ end }}
+</nav>
+</body></html>
